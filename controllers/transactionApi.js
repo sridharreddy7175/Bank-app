@@ -3,11 +3,13 @@ const userAmount = require("../models/createUser");
 
 exports.createTransaction = async (req, res) => {
   try {
-    let { rName, sName, makeTransaction, balance } = req.body;
+    let { rName, sName, makeTransaction, balance,remail } = req.body;
     console.log("hhhhhh")
     // check if the user amount exists
     let user = await userAmount.User.findOne({ email: req.body.email });
-    console.log("user------->",user.amount,user)
+    let checkEmail=await userAmount.User.findOne({ remail: req.body.email });
+    console.log("chhhhh",checkEmail,remail)
+    console.log("user------->",user.amount,user,)
     console.log("askdj", sName,rName,
     balance,
     makeTransaction,)
@@ -24,18 +26,19 @@ exports.createTransaction = async (req, res) => {
       });
       newData = await newData.save();
    
-      console.log(newData)
+      console.log(newData,"new Data",remail)
       userAmount.User.findOneAndUpdate(
-        user.email ,
+        checkEmail.email ,
         { $set: { amount:makeTransaction-balance } },
      ).then((res)=>{
         console.log("res666666",res)
 
       })
-
+    //   let sumAmount=parseInt(user.amount)+parseInt(balance)
+    //   console.log("SumAmount",sumAmount)
     //   userAmount.User.findOneAndUpdate(
-    //     rName ,
-    //     { $set: { amount:user.amount+balance } },
+    //     user.email ,
+    //     { $set: { amount:sumAmount } },
     //  ).then((res)=>{
     //     console.log("res666666",res)
 
